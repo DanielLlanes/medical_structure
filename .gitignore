@@ -22,6 +22,6 @@ devtools/minio_data/*
 backends/landing/*
 backends/api-shared/*
 
-# Permitir que el archivo .gitignore (si existiera dentro) se suba
+# Permitir que el archivo .gitignore (si existiera dentro) se suba!!
 !backends/landing/.gitkeep
 !backends/api-shared/.gitkeep
