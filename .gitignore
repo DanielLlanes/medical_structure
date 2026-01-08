@@ -1,0 +1,28 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Entorno y Secretos
+.env
+.env.backup
+certs/*.key
+certs/*.crt
+
+# Docker y Bases de Datos
+services/mysql/data/*
+!services/mysql/data/.gitkeep
+devtools/minio_data/*
+
+# Logs y temporales
+*.log
+.phpunit.result.cache
+.pnpm-store/
+
+# --- Backends ---
+# Ignoramos todo el contenido de las carpetas
+backends/landing/*
+backends/api-shared/*
+
+# EXCEPTUAMOS los archivos .gitkeep para que las carpetas NO desaparezcan de GitHub
+!backends/landing/.gitkeep
+!backends/api-shared/.gitkeep
