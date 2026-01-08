@@ -17,3 +17,11 @@ devtools/minio_data/*
 *.log
 .phpunit.result.cache
 .pnpm-store/
+
+# Mantener las carpetas de los backends pero ignorar su contenido
+backends/landing/*
+backends/api-shared/*
+
+# Permitir que el archivo .gitignore (si existiera dentro) se suba
+!backends/landing/.gitkeep
+!backends/api-shared/.gitkeep
