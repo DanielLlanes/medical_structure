@@ -47,6 +47,8 @@ services:
     build:
       context: ./backends/common
     container_name: medical-api-1
+    environment:
+      - APP_INSTANCE=API_NODE_01
     volumes:
       - ./backends/api-shared:/var/www/medical
       - ./backends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -61,6 +63,8 @@ services:
     build:
       context: ./backends/common
     container_name: medical-api-2
+    environment:
+      - APP_INSTANCE=API_NODE_02
     volumes:
       - ./backends/api-shared:/var/www/medical
       - ./backends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
