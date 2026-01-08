@@ -1,0 +1,19 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Entorno y Secretos
+.env
+.env.backup
+certs/*.key
+certs/*.crt
+
+# Docker y Bases de Datos
+services/mysql/data/*
+!services/mysql/data/.gitkeep
+devtools/minio_data/*
+
+# Logs y temporales
+*.log
+.phpunit.result.cache
+.pnpm-store/
