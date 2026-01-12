@@ -81,6 +81,7 @@ services:
     container_name: medical-landing
     volumes:
       - ./backends/landing:/var/www/medical
+      - ./backends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./backends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     networks:
       - medical-network
