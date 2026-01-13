@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON *.* TO 'medical_user'@'%';
+FLUSH PRIVILEGES;
