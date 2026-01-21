@@ -14,6 +14,10 @@ services:
       - api1
       - api2
       - landing
+      - tenant1
+      - tenant2
+      - landlord1
+      - landlord2
       - websockets
 
   mysql:
@@ -22,9 +26,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: medical_db
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_USER: medical_user
-      MYSQL_PASSWORD: medical_password
+      ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3306:3306"
     volumes:
@@ -42,6 +44,7 @@ services:
     networks:
       - medical-network
 
+  # --- BACKEND API (CÓDIGO COMPARTIDO, INSTANCIAS ÚNICAS) ---
   api1:
     build:
       context: ./backends/common
@@ -71,6 +74,60 @@ services:
     depends_on:
       - mysql
       - redis
+    networks:
+      - medical-network
+
+  # --- FRONTEND TENANTS (USAN TU THEME.SCSS DE 27K LÍNEAS) ---
+  tenant1:
+    build:
+      context: ./frontends/common
+    container_name: medical-tenant-1
+    environment:
+      - APP_INSTANCE=TENANT_NODE_01
+    volumes:
+      - ./frontends/tenant:/var/www/medical
+      - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    networks:
+      - medical-network
+
+  tenant2:
+    build:
+      context: ./frontends/common
+    container_name: medical-tenant-2
+    environment:
+      - APP_INSTANCE=TENANT_NODE_02
+    volumes:
+      - ./frontends/tenant:/var/www/medical
+      - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    networks:
+      - medical-network
+
+  # --- FRONTEND LANDLORD (PROYECTO INDEPENDIENTE PARA ADMIN) ---
+  landlord1:
+    build:
+      context: ./frontends/common
+    container_name: medical-landlord-1
+    environment:
+      - APP_INSTANCE=LANDLORD_NODE_01
+    volumes:
+      - ./frontends/landlord:/var/www/medical
+      - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    networks:
+      - medical-network
+
+  landlord2:
+    build:
+      context: ./frontends/common
+    container_name: medical-landlord-2
+    environment:
+      - APP_INSTANCE=LANDLORD_NODE_02
+    volumes:
+      - ./frontends/landlord:/var/www/medical
+      - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     networks:
       - medical-network
 
@@ -124,5 +181,4 @@ services:
 
 networks:
   medical-network:
-    name: medical-network
-    driver: bridge
+    name

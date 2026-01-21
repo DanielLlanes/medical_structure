@@ -26,3 +26,26 @@ backends/api-shared/*
 # EXCEPTUAMOS los archivos .gitkeep para que las carpetas NO desaparezcan de GitHub
 !backends/landing/.gitkeep
 !backends/api-shared/.gitkeep
+
+# --- Backends ---
+backends/landing/*
+backends/api-shared/*
+!backends/landing/.gitkeep
+!backends/api-shared/.gitkeep
+
+# --- Frontends ---
+# Bloqueamos el contenido (Laravel de Tenant y Landlord) 
+# porque cada uno tendrá su propio repo independiente.
+frontends/tenant/*
+frontends/landlord/*
+
+# Mantenemos las carpetas en la estructura del orquestador
+!frontends/tenant/.gitkeep
+!frontends/landlord/.gitkeep
+
+# --- Seguridad Extra (Certificación) ---
+# Ignora cualquier certificado o llave que se genere en el futuro
+certs/*.pem
+certs/*.key
+certs/*.crt
+!certs/.gitkeep
