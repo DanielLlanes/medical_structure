@@ -28,20 +28,21 @@ dump.rdb
 backends/api-shared/*
 !backends/api-shared/.gitkeep
 
-# 2. Frontends
-# Ignoramos el código de los tres proyectos (Tenant, Landlord y Landing)
+# 2. Frontends (Tenant, Landlord y Landing)
+# Usamos /* para ignorar todo el contenido de la instalación de Laravel
 frontends/tenant/*
+!frontends/tenant/.gitkeep
+
 frontends/landlord/*
-frontends/landing/app/*
+!frontends/landlord/.gitkeep
+
+frontends/landing/*
+!frontends/landing/.gitkeep
 
 # --- LO QUE SÍ SE QUEDA (Configuración y Estructura) ---
-# Mantenemos los .gitkeep para que Git respete la existencia de las carpetas
-!frontends/tenant/.gitkeep
-!frontends/landlord/.gitkeep
-!frontends/landing/app/.gitkeep
-
 # Mantenemos las carpetas common (Configuración de Docker, PHP, Nginx)
-# Estas carpetas SÍ pertenecen a este repositorio maestro.
+# Estas carpetas SÍ pertenecen a este repositorio maestro (Structure).
+
 !frontends/common/
 !frontends/landing/common/
 !backends/common/
