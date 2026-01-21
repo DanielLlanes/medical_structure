@@ -44,7 +44,7 @@ services:
     networks:
       - medical-network
 
-  # --- BACKEND API (CÓDIGO COMPARTIDO, INSTANCIAS ÚNICAS) ---
+  # --- BACKEND API ---
   api1:
     build:
       context: ./backends/common
@@ -77,7 +77,7 @@ services:
     networks:
       - medical-network
 
-  # --- FRONTEND TENANTS (USAN TU THEME.SCSS DE 27K LÍNEAS) ---
+  # --- FRONTEND TENANTS ---
   tenant1:
     build:
       context: ./frontends/common
@@ -104,7 +104,7 @@ services:
     networks:
       - medical-network
 
-  # --- FRONTEND LANDLORD (PROYECTO INDEPENDIENTE PARA ADMIN) ---
+  # --- FRONTEND LANDLORD ---
   landlord1:
     build:
       context: ./frontends/common
@@ -131,19 +131,19 @@ services:
     networks:
       - medical-network
 
+  # --- FRONTEND LANDING ---
   landing:
     build:
-      # Ahora el contexto es su propia carpeta common
-      context: ./landing/common 
+      context: ./frontends/common
     container_name: medical-landing
     volumes:
-      # El volumen ahora apunta a la raíz
-      - ./landing:/var/www/medical
-      - ./landing/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
-      - ./landing/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+      - ./frontends/landing:/var/www/medical  # <-- Aquí es donde vive tu Laravel de Landing
+      - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     networks:
       - medical-network
 
+  # --- OTROS SERVICIOS ---
   websockets:
     build:
       context: ./websockets

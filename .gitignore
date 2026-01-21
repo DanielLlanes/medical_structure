@@ -17,30 +17,35 @@ certs/*.pem
 services/mysql/data/*
 !services/mysql/data/.gitkeep
 devtools/minio_data/*
+services/redis/dump.rdb
+dump.rdb
 
 # --- ESTRUCTURA DE REPOS INDEPENDIENTES ---
 # Bloqueamos el contenido de las apps porque cada una tiene su propio Git.
 # Solo mantenemos la carpeta y el .gitkeep en este orquestador.
 
-# 1. Landing (Ahora en la raíz)
-landing/*
-!landing/.gitkeep
-!landing/common/
-
-# 2. Backends
+# 1. Backends
 backends/api-shared/*
 !backends/api-shared/.gitkeep
 
-# 3. Frontends (Tenants y Landlord)
+# 2. Frontends
+# Ignoramos el código de los tres proyectos (Tenant, Landlord y Landing)
 frontends/tenant/*
 frontends/landlord/*
+frontends/landing/app/*
+
+# --- LO QUE SÍ SE QUEDA (Configuración y Estructura) ---
+# Mantenemos los .gitkeep para que Git respete la existencia de las carpetas
 !frontends/tenant/.gitkeep
 !frontends/landlord/.gitkeep
+!frontends/landing/app/.gitkeep
 
-# Redis
-services/redis/dump.rdb
-dump.rdb
+# Mantenemos las carpetas common (Configuración de Docker, PHP, Nginx)
+# Estas carpetas SÍ pertenecen a este repositorio maestro.
+!frontends/common/
+!frontends/landing/common/
+!backends/common/
 
-# --- NOTA ---
-# No ignoramos las carpetas 'common/' porque ahí vive la configuración 
-# de Docker que SÍ pertenece a este repositorio de estructura.
+# --- Otros ---
+.DS_Store
+Thumbs.db
