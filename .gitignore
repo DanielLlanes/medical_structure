@@ -120,3 +120,4 @@ frontends/landing/*
 frontends/landing/README.md
 backends/api-shared/README.md
 frontends/landlord/README.md
+frontends/tenant/README.md
