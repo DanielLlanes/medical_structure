@@ -1,52 +1,118 @@
-# --- Dependencias y Temporales ---
+# ───────────────────────────────────────────────────────────────
+# Dependencias y Temporales (Generales)
+# ───────────────────────────────────────────────────────────────
 node_modules/
 vendor/
 *.log
 .phpunit.result.cache
 .pnpm-store/
+*.cache
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+*.temp
 
-# --- Seguridad y Secretos (Vital para Certificación) ---
+# ───────────────────────────────────────────────────────────────
+# Seguridad y Secretos (NUNCA subir)
+# ───────────────────────────────────────────────────────────────
 .env
-.env.backup
+.env.*
+.env.local
+.env.development
+.env.testing
+.env.example.local
+
+# Certificados y claves privadas (cada máquina genera los suyos)
 certs/*.key
 certs/*.crt
 certs/*.pem
-!certs/.gitkeep
+certs/*.csr
+certs/*.p12
+certs/*.pfx
+certs/*.der
+certs/*.jks
+certs/*.bak
+certs/*.old
 
-# --- Datos Persistentes (Docker) ---
+# Permitir estructura y documentación en certs/
+!certs/.gitkeep
+!certs/README.md
+!certs/generate-cert.sh      # si tienes script para generarlos
+
+# ───────────────────────────────────────────────────────────────
+# Datos Persistentes de Docker (Volumes)
+# ───────────────────────────────────────────────────────────────
 services/mysql/data/*
 !services/mysql/data/.gitkeep
+
 devtools/minio_data/*
 services/redis/dump.rdb
 dump.rdb
 
-# --- ESTRUCTURA DE REPOS INDEPENDIENTES ---
-# Bloqueamos el contenido de las apps porque cada una tiene su propio Git.
-# Solo mantenemos la carpeta y el .gitkeep en este orquestador.
+# ───────────────────────────────────────────────────────────────
+# Repositorios Independientes (Laravel installs) - Ignorar TODO
+# ───────────────────────────────────────────────────────────────
 
-# 1. Backends
+# Backends
 backends/api-shared/*
 !backends/api-shared/.gitkeep
 
-# 2. Frontends (Tenant, Landlord y Landing)
-# Usamos /* para ignorar todo el contenido de la instalación de Laravel
-frontends/tenant/*
-!frontends/tenant/.gitkeep
-
+# Frontends
 frontends/landlord/*
 !frontends/landlord/.gitkeep
+
+frontends/tenant/*
+!frontends/tenant/.gitkeep
 
 frontends/landing/*
 !frontends/landing/.gitkeep
 
-# --- LO QUE SÍ SE QUEDA (Configuración y Estructura) ---
-# Mantenemos las carpetas common (Configuración de Docker, PHP, Nginx)
-# Estas carpetas SÍ pertenecen a este repositorio maestro (Structure).
+# Patrones estándar de Laravel (por si algo se filtra)
+**/vendor/
+**/node_modules/
+**/storage/logs/*
+**/storage/framework/cache/*
+**/storage/framework/sessions/*
+**/storage/framework/views/*
+**/bootstrap/cache/*
+**/public/storage/
+**/composer.lock
+**/package-lock.json
+**/pnpm-lock.yaml
+**/yarn.lock
+**/.env
+**/artisan
+**/phpunit.xml
+**/tests/
 
-!frontends/common/
-!frontends/landing/common/
+# ───────────────────────────────────────────────────────────────
+# Otros (no necesarios en el repo orquestador)
+# ───────────────────────────────────────────────────────────────
+*.bak
+*.orig
+*.rej
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# ───────────────────────────────────────────────────────────────
+# LO QUE SÍ SE QUEDA (Estructura y Configuración)
+# ───────────────────────────────────────────────────────────────
+# No ignoramos estas carpetas ni archivos de configuración
+!docker-compose.yml
+!Dockerfile*
 !backends/common/
-
-# --- Otros ---
-.DS_Store
-Thumbs.db
+!frontends/common/
+!balanceador/
+!certs/                 # estructura sí, contenido no
+!services/
+!devtools/
+!websockets/
+!.gitkeep
+!README.md
+!README*.md
