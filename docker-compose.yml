@@ -133,12 +133,14 @@ services:
 
   landing:
     build:
-      context: ./backends/common
+      # Ahora el contexto es su propia carpeta common
+      context: ./landing/common 
     container_name: medical-landing
     volumes:
-      - ./backends/landing:/var/www/medical
-      - ./backends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
-      - ./backends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+      # El volumen ahora apunta a la raíz
+      - ./landing:/var/www/medical
+      - ./landing/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./landing/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     networks:
       - medical-network
 
@@ -181,4 +183,4 @@ services:
 
 networks:
   medical-network:
-    name
+    driver: bridge

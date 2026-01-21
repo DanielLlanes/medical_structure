@@ -1,51 +1,46 @@
-# Dependencias
+# --- Dependencias y Temporales ---
 node_modules/
 vendor/
-
-# Entorno y Secretos
-.env
-.env.backup
-certs/*.key
-certs/*.crt
-
-# Docker y Bases de Datos
-services/mysql/data/*
-!services/mysql/data/.gitkeep
-devtools/minio_data/*
-
-# Logs y temporales
 *.log
 .phpunit.result.cache
 .pnpm-store/
 
-# --- Backends ---
-# Ignoramos todo el contenido de las carpetas
-backends/landing/*
-backends/api-shared/*
+# --- Seguridad y Secretos (Vital para Certificación) ---
+.env
+.env.backup
+certs/*.key
+certs/*.crt
+certs/*.pem
+!certs/.gitkeep
 
-# EXCEPTUAMOS los archivos .gitkeep para que las carpetas NO desaparezcan de GitHub
-!backends/landing/.gitkeep
+# --- Datos Persistentes (Docker) ---
+services/mysql/data/*
+!services/mysql/data/.gitkeep
+devtools/minio_data/*
+
+# --- ESTRUCTURA DE REPOS INDEPENDIENTES ---
+# Bloqueamos el contenido de las apps porque cada una tiene su propio Git.
+# Solo mantenemos la carpeta y el .gitkeep en este orquestador.
+
+# 1. Landing (Ahora en la raíz)
+landing/*
+!landing/.gitkeep
+!landing/common/
+
+# 2. Backends
+backends/api-shared/*
 !backends/api-shared/.gitkeep
 
-# --- Backends ---
-backends/landing/*
-backends/api-shared/*
-!backends/landing/.gitkeep
-!backends/api-shared/.gitkeep
-
-# --- Frontends ---
-# Bloqueamos el contenido (Laravel de Tenant y Landlord) 
-# porque cada uno tendrá su propio repo independiente.
+# 3. Frontends (Tenants y Landlord)
 frontends/tenant/*
 frontends/landlord/*
-
-# Mantenemos las carpetas en la estructura del orquestador
 !frontends/tenant/.gitkeep
 !frontends/landlord/.gitkeep
 
-# --- Seguridad Extra (Certificación) ---
-# Ignora cualquier certificado o llave que se genere en el futuro
-certs/*.pem
-certs/*.key
-certs/*.crt
-!certs/.gitkeep
+# Redis
+services/redis/dump.rdb
+dump.rdb
+
+# --- NOTA ---
+# No ignoramos las carpetas 'common/' porque ahí vive la configuración 
+# de Docker que SÍ pertenece a este repositorio de estructura.
