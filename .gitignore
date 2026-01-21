@@ -116,3 +116,7 @@ frontends/landing/*
 !.gitkeep
 !README.md
 !README*.md
+
+frontends/landing/README.md
+backends/api-shared/README.md
+frontends/landlord/README.md
