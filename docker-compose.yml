@@ -8,6 +8,9 @@ services:
     volumes:
       - ./balanceador/conf.d:/etc/nginx/conf.d:ro
       - ./certs:/etc/nginx/certs:ro
+      - ./frontends/tenant/public:/var/www/medical/public:ro
+      - ./frontends/landlord/public:/var/www/medical/public:ro
+      - ./frontends/landing/public:/var/www/medical/public:ro
     networks:
       - medical-network
     depends_on:
