@@ -26,7 +26,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: medical_db
-      ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3306:3306"
     volumes:
@@ -44,7 +44,6 @@ services:
     networks:
       - medical-network
 
-  # --- BACKEND API ---
   api1:
     build:
       context: ./backends/common
@@ -77,7 +76,6 @@ services:
     networks:
       - medical-network
 
-  # --- FRONTEND TENANTS ---
   tenant1:
     build:
       context: ./frontends/common
@@ -88,6 +86,8 @@ services:
       - ./frontends/tenant:/var/www/medical
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    depends_on:
+      - mysql
     networks:
       - medical-network
 
@@ -101,10 +101,11 @@ services:
       - ./frontends/tenant:/var/www/medical
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    depends_on:
+      - mysql
     networks:
       - medical-network
 
-  # --- FRONTEND LANDLORD ---
   landlord1:
     build:
       context: ./frontends/common
@@ -115,6 +116,8 @@ services:
       - ./frontends/landlord:/var/www/medical
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    depends_on:
+      - mysql
     networks:
       - medical-network
 
@@ -128,22 +131,24 @@ services:
       - ./frontends/landlord:/var/www/medical
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    depends_on:
+      - mysql
     networks:
       - medical-network
 
-  # --- FRONTEND LANDING ---
   landing:
     build:
       context: ./frontends/common
     container_name: medical-landing
     volumes:
-      - ./frontends/landing:/var/www/medical  # <-- Aquí es donde vive tu Laravel de Landing
+      - ./frontends/landing:/var/www/medical
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
+    depends_on:
+      - mysql
     networks:
       - medical-network
 
-  # --- OTROS SERVICIOS ---
   websockets:
     build:
       context: ./websockets
@@ -181,6 +186,7 @@ services:
     networks:
       - medical-network
 
+# --- ESTA PARTE DEBE IR SIN ESPACIOS AL INICIO ---
 networks:
   medical-network:
     driver: bridge
