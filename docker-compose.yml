@@ -8,9 +8,11 @@ services:
     volumes:
       - ./balanceador/conf.d:/etc/nginx/conf.d:ro
       - ./certs:/etc/nginx/certs:ro
-      - ./frontends/tenant/public:/var/www/medical/public:ro
-      - ./frontends/landlord/public:/var/www/medical/public:ro
-      - ./frontends/landing/public:/var/www/medical/public:ro
+      # RUTAS ÚNICAS PARA EL BALANCEADOR
+      - ./frontends/tenant/public:/var/www/medical/tenant/public:ro
+      - ./frontends/landlord/public:/var/www/medical/landlord/public:ro
+      - ./frontends/landing/public:/var/www/medical/landing/public:ro
+      - ./backends/api-shared/public:/var/www/medical/api/public:ro
     networks:
       - medical-network
     depends_on:
@@ -54,7 +56,7 @@ services:
     environment:
       - APP_INSTANCE=API_NODE_01
     volumes:
-      - ./backends/api-shared:/var/www/medical
+      - ./backends/api-shared:/var/www/medical/api
       - ./backends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./backends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -70,7 +72,7 @@ services:
     environment:
       - APP_INSTANCE=API_NODE_02
     volumes:
-      - ./backends/api-shared:/var/www/medical
+      - ./backends/api-shared:/var/www/medical/api
       - ./backends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./backends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -86,7 +88,7 @@ services:
     environment:
       - APP_INSTANCE=TENANT_NODE_01
     volumes:
-      - ./frontends/tenant:/var/www/medical
+      - ./frontends/tenant:/var/www/medical/tenant
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -101,7 +103,7 @@ services:
     environment:
       - APP_INSTANCE=TENANT_NODE_02
     volumes:
-      - ./frontends/tenant:/var/www/medical
+      - ./frontends/tenant:/var/www/medical/tenant
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -116,7 +118,7 @@ services:
     environment:
       - APP_INSTANCE=LANDLORD_NODE_01
     volumes:
-      - ./frontends/landlord:/var/www/medical
+      - ./frontends/landlord:/var/www/medical/landlord
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -131,7 +133,7 @@ services:
     environment:
       - APP_INSTANCE=LANDLORD_NODE_02
     volumes:
-      - ./frontends/landlord:/var/www/medical
+      - ./frontends/landlord:/var/www/medical/landlord
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -144,7 +146,7 @@ services:
       context: ./frontends/common
     container_name: medical-landing
     volumes:
-      - ./frontends/landing:/var/www/medical
+      - ./frontends/landing:/var/www/medical/landing
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ./frontends/common/supervisor/master.conf:/etc/supervisor/conf.d/master.conf:ro
     depends_on:
@@ -189,7 +191,6 @@ services:
     networks:
       - medical-network
 
-# --- ESTA PARTE DEBE IR SIN ESPACIOS AL INICIO ---
 networks:
   medical-network:
     driver: bridge
