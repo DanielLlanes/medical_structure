@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   balanceador:
     build: ./balanceador
@@ -49,6 +51,9 @@ services:
     networks:
       - medical-network
 
+  # ==========================
+  # API (1 instalación, 2 instancias)
+  # ==========================
   api1:
     build:
       context: ./backends/common
@@ -81,12 +86,17 @@ services:
     networks:
       - medical-network
 
+  # ==========================
+  # TENANT (1 instalación, 2 instancias)
+  # ==========================
   tenant1:
     build:
       context: ./frontends/common
     container_name: medical-tenant-1
     environment:
       - APP_INSTANCE=TENANT_NODE_01
+      - LARAVEL_APP_PATH=tenant
+      - RUN_QUEUE_WORKER=true
     volumes:
       - ./frontends/tenant:/var/www/medical/tenant
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -102,6 +112,8 @@ services:
     container_name: medical-tenant-2
     environment:
       - APP_INSTANCE=TENANT_NODE_02
+      - LARAVEL_APP_PATH=tenant
+      - RUN_QUEUE_WORKER=true
     volumes:
       - ./frontends/tenant:/var/www/medical/tenant
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -111,12 +123,17 @@ services:
     networks:
       - medical-network
 
+  # ==========================
+  # LANDLORD (1 instalación, 2 instancias)
+  # ==========================
   landlord1:
     build:
       context: ./frontends/common
     container_name: medical-landlord-1
     environment:
       - APP_INSTANCE=LANDLORD_NODE_01
+      - LARAVEL_APP_PATH=landlord
+      - RUN_QUEUE_WORKER=true
     volumes:
       - ./frontends/landlord:/var/www/medical/landlord
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -132,6 +149,8 @@ services:
     container_name: medical-landlord-2
     environment:
       - APP_INSTANCE=LANDLORD_NODE_02
+      - LARAVEL_APP_PATH=landlord
+      - RUN_QUEUE_WORKER=true
     volumes:
       - ./frontends/landlord:/var/www/medical/landlord
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -141,10 +160,19 @@ services:
     networks:
       - medical-network
 
+  # ==========================
+  # LANDING (1 instalación, 1 instancia)
+  # ==========================
   landing:
     build:
       context: ./frontends/common
     container_name: medical-landing
+    extra_hosts:
+      - "api.medical.test:host-gateway"
+    environment:
+      - APP_INSTANCE=LANDING_NODE_01
+      - LARAVEL_APP_PATH=landing
+      - RUN_QUEUE_WORKER=true
     volumes:
       - ./frontends/landing:/var/www/medical/landing
       - ./frontends/common/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -154,6 +182,9 @@ services:
     networks:
       - medical-network
 
+  # ==========================
+  # WEBSOCKETS
+  # ==========================
   websockets:
     build:
       context: ./websockets
@@ -167,6 +198,9 @@ services:
     depends_on:
       - redis
 
+  # ==========================
+  # MAILHOG
+  # ==========================
   mailhog:
     image: mailhog/mailhog
     container_name: medical-mailhog
@@ -176,6 +210,9 @@ services:
     networks:
       - medical-network
 
+  # ==========================
+  # MINIO
+  # ==========================
   minio:
     image: minio/minio
     container_name: medical-minio
